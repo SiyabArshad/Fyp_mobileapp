@@ -9,10 +9,10 @@ import IonicIcon from 'react-native-vector-icons/Ionicons';
 export default function Onboard({navigation}) {
   return (
     <View style={styles.mnonb}>
-      <Image resizeMode='contain' style={{height:rp(30) ,width:"90%"}} source={require("../../assets/images/splashicon.png")}/>
-        <Text style={styles.headtext}>JUSTGOLF!</Text>
+      <Image resizeMode='contain' style={{height:rp(30) ,width:"90%"}} source={require("../../assets/images/Logos/light_greenbackground.png")}/>
+        <Text style={styles.headtext}>DIGISCHOOL!</Text>
         <Text style={styles.desc}>
-        Improve your golf skills with us by enrolling in our courses and chat with other golfers.
+        Our Goal is to Digitalize Schools in Pakistan Keep Supporting us.
         </Text>
         <Pressable onPress={()=>navigation.navigate("login")} style={[styles.centertext,styles.btn]}>
         <IonicIcon name="arrow-forward" size={30} color={colors.green} />

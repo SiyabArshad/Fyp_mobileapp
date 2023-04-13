@@ -10,7 +10,6 @@ import MessageCard from '../Components/MessageCard';
 export default function UpdateProfile({navigation}) {
     const[email,setemail]=React.useState("")
     const[name,setname]=React.useState("")
-    const[desc,setdesc]=React.useState("")
     const [isload,setisload]=React.useState(false)
     const [issubmit,setissubmit]=React.useState(false)
     const [Error,setError]=React.useState('')
@@ -79,10 +78,6 @@ export default function UpdateProfile({navigation}) {
      <View style={{marginBottom:rp(7)}}>
         <Text style={styles.lable}>Username</Text>
         <TextInput value={name} onChangeText={(e)=>setname(e)} style={{marginTop:rp(1),borderBottomWidth:1,borderBottomColor:colors.black,paddingHorizontal:rp(1.2),paddingVertical:rp(.6),color:colors.black,fontFamily:fonts.Rregular}}/>
-     </View>
-     <View style={{marginBottom:rp(7)}}>
-        <Text style={styles.lable}>Description</Text>
-        <TextInput value={desc} onChangeText={(e)=>setdesc(e)} style={{marginTop:rp(1),borderBottomWidth:1,borderBottomColor:colors.black,paddingHorizontal:rp(1.2),paddingVertical:rp(.6),color:colors.black,fontFamily:fonts.Rregular}}/>
      </View>
      </View>
     </View>

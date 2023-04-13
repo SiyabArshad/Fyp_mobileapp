@@ -7,14 +7,9 @@ import { LogBox } from 'react-native';
 import Loading from './src/Components/Loading';
 import Onboard from './src/Screens/Onboard';
 import Login from './src/Screens/Login';
-import Signup from './src/Screens/Signup';
 import Forgotpass from './src/Screens/Forgotpass';
-import Aboutus from './src/Screens/Aboutus';
-import Premium from './src/Screens/Premium';
 import UpdateProfile from './src/Screens/UpdateProfile';
 import Home from './src/Screens/Home';
-import Course from './src/Screens/Course';
-import Chat from './src/Screens/Chat';
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { BottomTabBarProps, BottomTabNavigationOptions, createBottomTabNavigator } from '@react-navigation/bottom-tabs'
@@ -50,12 +45,7 @@ export default function App() {
       <Stack.Screen name="onboard" component={Onboard} />
       <Stack.Screen name="login" component={Login} />
       <Stack.Screen name="forgot" component={Forgotpass}  />
-      <Stack.Screen name='signup' component={Signup}/>
-      <Stack.Screen name='about' component={Aboutus}/>
-      <Stack.Screen name='premium' component={Premium}/>
       <Stack.Screen name='edit' component={UpdateProfile}/>
-      <Stack.Screen name='chat' component={Chat}/>
-      <Stack.Screen name='course' component={Course}/>
       <Stack.Screen name='home' component={TabNavigation}/>
     </Stack.Navigator>
     {/* </SafeAreaView> */}

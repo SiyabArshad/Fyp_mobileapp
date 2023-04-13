@@ -25,18 +25,6 @@ export default function Profile({navigation}) {
             <FIcon name="edit" size={20} color={colors.white} />
               <Text style={{color:colors.white,fontSize:rp(2.3),fontFamily:fonts.Nmedium,marginLeft:rp(2)}}>Edit Profile</Text>
             </Pressable>
-            <Pressable onPress={()=>navigation.navigate("premium")} style={{backgroundColor:colors.black,paddingHorizontal:rp(2),paddingVertical:rp(1.3),borderRadius:rp(1),marginBottom:rp(1),display:"flex",flexDirection:"row",alignItems:"center"}}>
-            <IonicIcon name="card" size={20} color={colors.white} />
-              <Text style={{color:colors.white,fontSize:rp(2.3),fontFamily:fonts.Nmedium,marginLeft:rp(2)}}>Upgrade Account</Text>
-            </Pressable>
-            <Pressable onPress={()=>navigation.navigate("about")} style={{backgroundColor:colors.black,paddingHorizontal:rp(2),paddingVertical:rp(1.3),borderRadius:rp(1),marginBottom:rp(1),display:"flex",flexDirection:"row",alignItems:"center"}}>
-            <EIcon name="info" size={20} color={colors.white} />
-              <Text style={{color:colors.white,fontSize:rp(2.3),fontFamily:fonts.Nmedium,marginLeft:rp(2)}}>About us</Text>
-            </Pressable>
-            <Pressable style={{backgroundColor:colors.black,paddingHorizontal:rp(2),paddingVertical:rp(1.3),borderRadius:rp(1),marginBottom:rp(1),display:"flex",flexDirection:"row",alignItems:"center"}}>
-            <EIcon name="share" size={20} color={colors.white} />
-              <Text style={{color:colors.white,fontSize:rp(2.3),fontFamily:fonts.Nmedium,marginLeft:rp(2)}}>Share</Text>
-            </Pressable>
             <Pressable onPress={()=>navigation.navigate("login")} style={{backgroundColor:colors.black,paddingHorizontal:rp(2),paddingVertical:rp(1.3),borderRadius:rp(1),marginBottom:rp(1),display:"flex",flexDirection:"row",alignItems:"center"}}>
             <MaterialIcon name="logout" size={20} color={colors.white} />
               <Text style={{color:colors.white,fontSize:rp(2.3),fontFamily:fonts.Nmedium,marginLeft:rp(2)}}>Logout</Text>

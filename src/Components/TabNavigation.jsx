@@ -1,17 +1,13 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import AntDesign from "react-native-vector-icons/AntDesign"
+import IonicIcons from "react-native-vector-icons/Ionicons"
 import { RFPercentage } from 'react-native-responsive-fontsize';
 import { View } from 'react-native';
-
 import colors from '../configs/colors';
-import fonts from '../configs/fonts';
 import Home from '../Screens/Home';
-import Request from '../Screens/Request';
-import Inbox from '../Screens/Inbox';
 import Profile from '../Screens/Profile';
-
+import Results from '../Screens/Results';
 const Tab = createBottomTabNavigator();
 
 const TabNavigation = () => {
@@ -27,7 +23,6 @@ const TabNavigation = () => {
           marginHorizontal: RFPercentage(1.5),
           marginBottom: RFPercentage(2),
           borderRadius: RFPercentage(3),
-          paddingVertical:RFPercentage(2),
           shadowColor: '#000000',
           shadowOffset: {
             width: 0,
@@ -42,17 +37,15 @@ const TabNavigation = () => {
 
           if (route.name === 'homescreen') {
             iconName = focused ? 'home' : 'home-outline';
-          } else if (route.name === 'request') {
-            iconName = focused ? 'bell' : 'bell-outline';
-          } else if (route.name === 'inbox') {
-            iconName = focused ? 'chat' : 'chat-outline';
+          }else if (route.name === 'result') {
+            iconName = focused ? 'md-notifications-circle-outline' : 'md-notifications-circle';
           } else if (route.name === 'profile') {
-            iconName = focused ? 'account' : 'account-outline';
+            iconName = focused ? 'md-person-circle' : 'md-person-circle-outline';
           }
 
           return (
-            <View style={{ alignSelf: 'center',marginTop:RFPercentage(1) }}>
-              <MaterialCommunityIcons name={iconName} size={30} color={color} />
+            <View style={{ alignSelf: 'center'}}>
+              <IonicIcons name={iconName} size={30} color={color} />
             </View>
           );
         },
@@ -66,15 +59,8 @@ const TabNavigation = () => {
         }}
       />
       <Tab.Screen
-        name="request"
-        component={Request}
-        options={{
-          tabBarShowLabel: false,
-        }}
-      />
-      <Tab.Screen
-        name="inbox"
-        component={Inbox}
+        name="result"
+        component={Results}
         options={{
           tabBarShowLabel: false,
         }}

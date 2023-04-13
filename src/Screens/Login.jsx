@@ -91,21 +91,7 @@ export default function Login({navigation}) {
                     Forgotten Password?
                     </Text>
                 </Pressable>
-                <Pressable onPress={()=>navigation.navigate("signup")} style={{marginTop:rp(.3)}}>
-                    <Text style={{fontFamily:fonts.Nregular,fontSize:rp(2.5),color:colors.textgrey}}>
-                    or Create a New Account?
-                    </Text>
-                </Pressable>
      </View>
-     <Image 
-     style={{
-        position:"absolute",
-       top:rp(34),
-       left:-20,
-       zIndex:-9
-     }}
-     resizeMode='contain'
-     source={require("../../assets/images/Uniondesign.png")}/>     
     </ScrollView>
   )
 }
@@ -113,7 +99,8 @@ export default function Login({navigation}) {
 const styles=StyleSheet.create({
     mnonb:{
         flex:1,
-        backgroundColor:colors.white
+        backgroundColor:colors.white,
+        position:"relative"
     },
     centertext:{
         display:"flex",

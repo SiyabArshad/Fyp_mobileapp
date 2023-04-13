@@ -81,16 +81,7 @@ export default function Forgotpass({navigation}) {
                         <Text style={{color:colors.white,fontFamily:fonts.Nbold,fontSize:rp(3),textTransform:"uppercase"}}>Send</Text>
                     }
                 </Pressable>
-     </View>
-     <Image 
-     style={{
-        position:"absolute",
-       top:rp(34),
-       left:-20,
-       zIndex:-9
-     }}
-     resizeMode='contain'
-     source={require("../../assets/images/Uniondesign.png")}/>     
+     </View> 
     </ScrollView>
   )
 }
