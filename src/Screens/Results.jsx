@@ -5,62 +5,86 @@ import fonts from "../configs/fonts"
 import colors from '../configs/colors'
 import { RFPercentage as rp, RFValue as rf } from "react-native-responsive-fontsize";
 import IonicIcon from 'react-native-vector-icons/Ionicons';
-import { Permissions } from 'expo-permissions';
 import * as FileSystem from 'expo-file-system';
-
+const { StorageAccessFramework } = FileSystem;
+import Loading from "../Components/Loading"
 export default function Results({navigation}) {
     const [isload,setisload]=React.useState(false)
     const [isVisible, setIsVisible] = React.useState(false);
-// Function to request permissions for Android
-async function requestStoragePermission() {
+    const [downloadProgress, setDownloadProgress] = React.useState();
+    const downloadPath = FileSystem.documentDirectory + (Platform.OS == 'android' ? '' : '');
+    const ensureDirAsync = async (dir, intermediates = true) => {
+      const props = await FileSystem.getInfoAsync(dir)
+      if (props.exist && props.isDirectory) {
+          return props;
+      }
+      let _ = await FileSystem.makeDirectoryAsync(dir, { intermediates })
+      return await ensureDirAsync(dir, intermediates)
+  }
+  const downloadCallback = downloadProgress => {
+    const progress = downloadProgress.totalBytesWritten / downloadProgress.totalBytesExpectedToWrite;
+    setDownloadProgress(progress);
+};
+const downloadFile = async (fileUrl) => {
+  if (Platform.OS == 'android') {
+    const dir = ensureDirAsync(downloadPath);
+  }
+
+  let fileName = fileUrl.split('Result/')[1];
+  //alert(fileName)
+  const downloadResumable = FileSystem.createDownloadResumable(
+    fileUrl,
+    downloadPath + fileName,
+    {},
+    downloadCallback
+  );
+  const saveAndroidFile = async (fileUri, fileName = 'File') => {
     try {
-      const granted = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-      if (granted.status === 'granted') {
-        console.log('Storage permission granted');
-        return true;
-      } else {
-        console.log('Storage permission denied');
-        return false;
-      }
-    } catch (err) {
-      console.warn(err);
-      return false;
-    }
-  }
-  
-  // Function to download file
-  async function downloadFile() {
-    // File URL to download
-    const fileUrl = 'https://www.freepik.com/free-photo/flag-pakistan_1179433.htm#query=png&position=1&from_view=keyword&track=sph';
-    
-    // Check for storage permission on Android
-    if (Platform.OS === 'android') {
-      const permission = await requestStoragePermission();
-      if (!permission) {
-        console.log('Storage permission denied');
-        return;
-      }
-    } else {
-      const permission = await Permissions.askAsync(Permissions.MEDIA_LIBRARY_WRITE_ONLY);
-      if (permission.status !== 'granted') {
-        console.log('Storage permission denied');
-        return;
-      }
-    }
-  
-    // Download file using fetch API
-    const response = await fetch(fileUrl);
-    const fileData = await response.blob();
-  
-    // Save file to device storage using FileSystem API
-    const dirs = FileSystem.documentDirectory;
-    const filePath = `${dirs}/myfile.png`;
-    await FileSystem.writeAsStringAsync(filePath, fileData, { encoding: FileSystem.EncodingType.Base64 });
-    console.log('File downloaded to', filePath);
-  }
+      const fileString = await FileSystem.readAsStringAsync(fileUri, { encoding: FileSystem.EncodingType.Base64 });
       
+      const permissions = await StorageAccessFramework.requestDirectoryPermissionsAsync();
+      if (!permissions.granted) {
+        return;
+      }
+
+      try {
+        await StorageAccessFramework.createFileAsync(permissions.directoryUri, fileName, 'application/pdf')
+          .then(async (uri) => {
+            await FileSystem.writeAsStringAsync(uri, fileString, { encoding: FileSystem.EncodingType.Base64 });
+            alert('Report Downloaded Successfully')
+          })
+          .catch((e) => {
+          });
+      } catch (e) {
+        throw new Error(e);
+      }
+
+    } catch (err) {
+    }
+  }
+  try {
+    const { uri } = await downloadResumable.downloadAsync();
+    if (Platform.OS == 'android')
+      saveAndroidFile(uri, fileName)
+    else
+      saveIosFile(uri);
+  } catch (e) {
+    console.error('download error:', e);
+  }
+}
+const saveIosFile = (fileUri) => {
+  // your ios code
+  // i use expo share module to save ios file
+}
+  React.useEffect(()=>{
+    setisload(true)
+    setTimeout(() => {
+      setisload(false)
+    }, 3000);
+  },[])  
   return (
     <View style={styles.mnonb}>
+      <Loading visible={isload}/>
 <View style={{display:"flex",flexDirection:"row",justifyContent:"space-between",alignItems:"center",marginTop:rp(5)}}>
    <Text style={{fontSize:rp(5),fontFamily:fonts.Nextrabold}}>DIGI SCHOOL!</Text>
 </View>
@@ -73,7 +97,7 @@ async function requestStoragePermission() {
     [1,2,3,4,5].map((item,i)=>(
         <View style={{borderWidth:1,borderColor:colors.green,marginBottom:rp(1),paddingHorizontal:rp(2),paddingVertical:rp(1.7),borderRadius:rp(1),display:"flex",flexDirection:"row",alignItems:"center",justifyContent:"space-between"}}>
             <Text style={{color:colors.black,fontFamily:fonts.Nregular}}>Mid Term Results</Text>
-            <TouchableOpacity onPress={downloadFile}>
+            <TouchableOpacity onPress={()=>downloadFile("https://drive.google.com/file/d/1JR06fL6UVSBqlXAfWBFVnfJRr6pCLVnv/view?usp=drivesdk")}>
             <IonicIcon name='download' size={28} color={colors.green}/>
             </TouchableOpacity>
         </View>

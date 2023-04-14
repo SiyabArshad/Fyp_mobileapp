@@ -7,9 +7,9 @@ import { RFPercentage as rp, RFValue as rf } from "react-native-responsive-fonts
 import FIcon from 'react-native-vector-icons/FontAwesome';
 import { Avatar } from 'react-native-elements';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import Loading from "../Components/Loading"
 export default function Home({navigation}) {
     const [isload,setisload]=React.useState(false)
-    const [isVisible, setIsVisible] = React.useState(false);
     const [attendance,setattendance]=React.useState(null)
     const [selecteddate,setselecteddate]=React.useState(null)
     const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
@@ -22,11 +22,19 @@ export default function Home({navigation}) {
     };
     const handleConfirm = (date) => {
       const tempdate=new Date(date).toDateString()
-      setselecteddate(tempdate)
       hideDatePicker();
+      setselecteddate(tempdate)
+  
     };
-  return (
+    React.useEffect(()=>{
+      setisload(true)
+      setTimeout(() => {
+        setisload(false)
+      }, 3000);
+    },[])
+   return (
     <View style={styles.mnonb}>
+ <Loading visible={isload}/>
        <DateTimePickerModal
         isVisible={isDatePickerVisible}
         mode="date"
