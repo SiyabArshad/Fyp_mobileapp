@@ -6,10 +6,11 @@ import colors from '../configs/colors'
 import { RFPercentage as rp, RFValue as rf } from "react-native-responsive-fontsize";
 import IonicIcon from 'react-native-vector-icons/Ionicons';
 import { Avatar } from 'react-native-elements';
-export default function ResultModal({showmodal,visible}) {
+export default function ResultModal({closemodal=()=>{}}) {
   return (
-    <Modal visible={visible}>
-         <TouchableOpacity onPress={showmodal()} style={{backgroundColor:"red",marginLeft:20,marginTop:20,width:40,height:40,borderRadius:20,backgroundColor:colors.green,display:"flex",justifyContent:"center",alignItems:"center"}}>
+    <Modal transparent visible={true}>
+      <View style={{backgroundColor:"rgba(255,255,255,0.96)",flex:1}}>
+         <TouchableOpacity onPress={()=>closemodal(false)} style={{backgroundColor:"red",marginLeft:20,marginTop:20,width:40,height:40,borderRadius:20,backgroundColor:colors.green,display:"flex",justifyContent:"center",alignItems:"center"}}>
         <IonicIcon name='close' size={24} color={colors.white}/>
   </TouchableOpacity>
         <View style={{flex:1,justifyContent:"center",alignItems:"center"}}>
@@ -39,6 +40,7 @@ export default function ResultModal({showmodal,visible}) {
         </View>
   </View>
  
+        </View>
         </View>
     </Modal>
   )
