@@ -36,19 +36,19 @@ const AttendanceChart = () => {
         accessor="value"
         backgroundColor="transparent"
         paddingLeft="15"
-        center={[0, 0]}
+        center={[60, 5]}
         absolute
-        hasLegend
+        hasLegend={false}
         
       />
       <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 10 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', marginRight: 20 }}>
           <View style={{ backgroundColor: colors.red, width: 10, height: 10, marginRight: 5 }} />
-          <Text>Absent</Text>
+          <Text>{`Absent-${absentValue}`}</Text>
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <View style={{ backgroundColor: colors.green, width: 10, height: 10, marginRight: 5 }} />
-          <Text>Present</Text>
+          <Text>{`Present-${presentValue}`}</Text>
         </View>
       </View>
       <Text style={{ textAlign: 'center', marginTop: 10 }}>Total Attendance: {totalAttendance}</Text>

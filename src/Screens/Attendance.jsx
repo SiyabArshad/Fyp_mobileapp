@@ -38,7 +38,7 @@ export default function Attendance({navigation,route}) {
   return (
 
     <SafeAreaView style={{flex:1}}>
-        <View style={{paddingHorizontal:rp(3),marginBottom:rp(3)}}>
+        <View style={{flex:1,paddingHorizontal:rp(3),marginBottom:rp(3)}}>
         <Loading visible={isload}/>
        <DateTimePickerModal
         isVisible={isDatePickerVisible}
