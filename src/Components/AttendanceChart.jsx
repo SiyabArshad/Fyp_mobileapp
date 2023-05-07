@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 import { PieChart } from 'react-native-chart-kit';
-
+import colors from "../configs/colors"
 const AttendanceChart = () => {
   const absentValue = 50;
   const presentValue = 110;
@@ -11,12 +11,12 @@ const AttendanceChart = () => {
     {
       name: 'Absent',
       value: absentValue,
-      color: '#F44336',
+      color: colors.red,
     },
     {
       name: 'Present',
       value: presentValue,
-      color: '#4CAF50',
+      color: colors.green,
     },
   ];
 
@@ -24,8 +24,8 @@ const AttendanceChart = () => {
     <View>
       <PieChart
         data={pieData}
-        width={300}
-        height={200}
+        width={350}
+        height={250}
         chartConfig={{
           backgroundColor: '#ffffff',
           backgroundGradientFrom: '#ffffff',
@@ -36,16 +36,18 @@ const AttendanceChart = () => {
         accessor="value"
         backgroundColor="transparent"
         paddingLeft="15"
-        center={[10, 0]}
+        center={[0, 0]}
         absolute
+        hasLegend
+        
       />
       <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 10 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', marginRight: 20 }}>
-          <View style={{ backgroundColor: '#F44336', width: 10, height: 10, marginRight: 5 }} />
+          <View style={{ backgroundColor: colors.red, width: 10, height: 10, marginRight: 5 }} />
           <Text>Absent</Text>
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <View style={{ backgroundColor: '#4CAF50', width: 10, height: 10, marginRight: 5 }} />
+          <View style={{ backgroundColor: colors.green, width: 10, height: 10, marginRight: 5 }} />
           <Text>Present</Text>
         </View>
       </View>
