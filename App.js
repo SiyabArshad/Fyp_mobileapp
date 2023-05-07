@@ -14,6 +14,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { BottomTabBarProps, BottomTabNavigationOptions, createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import TabNavigation from './src/Components/TabNavigation';
+import Attendance from './src/Screens/Attendance';
 const Tab = createBottomTabNavigator()
 const Stack = createNativeStackNavigator();
 
@@ -47,6 +48,7 @@ export default function App() {
       <Stack.Screen name="forgot" component={Forgotpass}  />
       <Stack.Screen name='edit' component={UpdateProfile}/>
       <Stack.Screen name='home' component={TabNavigation}/>
+      <Stack.Screen name='attendance' component={Attendance}/>
     </Stack.Navigator>
     {/* </SafeAreaView> */}
     </NavigationContainer>
