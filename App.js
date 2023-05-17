@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View,ActivityIndicator } from 'react-native';
 import React from 'react';
 import * as Font from "expo-font";
 
@@ -17,6 +17,12 @@ import TabNavigation from './src/Components/TabNavigation';
 import Attendance from './src/Screens/Attendance';
 const Tab = createBottomTabNavigator()
 const Stack = createNativeStackNavigator();
+//redux imports and others
+import { Provider } from 'react-redux';
+import store from './src/redux/store';
+import { useSelector,useDispatch } from 'react-redux';
+import {getCurrentuser } from './src/redux/auth/authaction';
+import colors from './src/configs/colors';
 
 export default function App() {
   LogBox.ignoreAllLogs()
@@ -40,21 +46,50 @@ export default function App() {
     return <Loading visible={true}/>
   }
   return (
-    <NavigationContainer >
-    {/* <SafeAreaView style={styles.container}> */}
-    <Stack.Navigator initialroute="onboard" screenOptions={{headerShown:false}} >
-      <Stack.Screen name="onboard" component={Onboard} />
-      <Stack.Screen name="login" component={Login} />
-      <Stack.Screen name="forgot" component={Forgotpass}  />
-      <Stack.Screen name='edit' component={UpdateProfile}/>
-      <Stack.Screen name='home' component={TabNavigation}/>
-      <Stack.Screen name='attendance' component={Attendance}/>
-    </Stack.Navigator>
-    {/* </SafeAreaView> */}
+   <Provider store={store}>
+     <NavigationContainer >
+      <Routes/>
     </NavigationContainer>
+   </Provider>
   );
 }
+const Routes=()=>{
+  const [isAuthenticated, setIsAuthenticated] = React.useState(false);
+  const dispatch=useDispatch()
+  const userinfo=useSelector(state=>state?.authReducer)
+  const[loading,setloading]=React.useState(false)
+  const gettinguserstate=async()=>{
+    setloading(true)
+    try{
+      dispatch(getCurrentuser()).finally(()=>setloading(false))      
+    }
+    catch{
 
+    }
+  }
+  React.useEffect(() => {
+    gettinguserstate()
+  }, []);
+  if(loading)
+  {
+    return <View style={{flex:1,justifyContent:"center",alignItems:"center"}}><ActivityIndicator size={24} color={colors.green}/></View>
+  }
+  return(
+    userinfo?.isLoggedIn===false?
+    <Stack.Navigator initialroute="onboard" screenOptions={{headerShown:false}} >
+    <Stack.Screen name="onboard" component={Onboard} />
+    <Stack.Screen name="login" component={Login} />
+    <Stack.Screen name="forgot" component={Forgotpass}  />
+  </Stack.Navigator>
+  :
+  <Stack.Navigator initialroute="onboard" screenOptions={{headerShown:false}} >
+    <Stack.Screen name='home' component={TabNavigation}/>
+    <Stack.Screen name='attendance' component={Attendance}/>
+    <Stack.Screen name='edit' component={UpdateProfile}/>
+  
+  </Stack.Navigator>
+  )
+}
 const styles = StyleSheet.create({
   container: {
     flex: 1,

@@ -6,7 +6,11 @@ import colors from '../configs/colors'
 import { RFPercentage as rp, RFValue as rf } from "react-native-responsive-fontsize";
 import IonicIcon from 'react-native-vector-icons/Ionicons';
 import MessageCard from '../Components/MessageCard';
-
+import api from "../configs/api"
+import routenames from '../configs/routes';
+import { useSelector,useDispatch } from 'react-redux';
+import { loginaction,logoutaction } from '../redux/auth/authaction';
+import Loading from "../Components/Loading"
 export default function Forgotpass({navigation}) {
     const[email,setemail]=React.useState("")
     const [isload,setisload]=React.useState(false)
@@ -23,25 +27,25 @@ export default function Forgotpass({navigation}) {
             setisload(false)
             settype(false)
             }
-            if(email.length>10){
-
-                setError("Logged in Successfully")
-                setisload(false)
-                settype(true)
+            else if(email.length>10)
+            {
+                const {data}=await api.post(routenames.passlink,{email})
+                    settype(true) 
+                    setisload(false)
+                    setError(data?.message)
+                 
             }
             else
             {
+                settype(false)
                 setError("Invalid Credentials")
                 setisload(false)
-                settype(false)
-           
             }
         }
-        catch{
-            setError("Try again later")
-            setisload(false)
+        catch(e){
             settype(false)
-           
+            setError("Try again later")   
+            setisload(false)
         }
     }
     const callbacksubmit=()=>{
@@ -49,6 +53,7 @@ export default function Forgotpass({navigation}) {
     }
   return (
     <ScrollView style={styles.mnonb} showsVerticalScrollIndicator={false}>
+        <Loading visible={isload}></Loading>
      <MessageCard type={type} message={Error} show={issubmit} callshow={callbacksubmit}/>
      <View style={{display:"flex",flexDirection:"row",marginTop:rp(5),marginHorizontal:rp(2)}}>
         

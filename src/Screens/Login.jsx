@@ -6,8 +6,12 @@ import colors from '../configs/colors'
 import { RFPercentage as rp, RFValue as rf } from "react-native-responsive-fontsize";
 import IonicIcon from 'react-native-vector-icons/Ionicons';
 import MessageCard from '../Components/MessageCard';
-
+import api from "../configs/api"
+import routenames from '../configs/routes';
+import { useSelector,useDispatch } from 'react-redux';
+import { loginaction } from '../redux/auth/authaction';
 export default function Login({navigation}) {
+    const dispatch=useDispatch()
     const[email,setemail]=React.useState("")
     const[password,setpassword]=React.useState("")
     const [isload,setisload]=React.useState(false)
@@ -24,26 +28,29 @@ export default function Login({navigation}) {
             setisload(false)
             settype(false)
             }
-            if(email.length>10&&password.length>5){
-
-                setError("Logged in Successfully")
-                setisload(false)
-                settype(true)
+            else if(email.length>10&&password.length>5)
+            {
+                const datainfo=await api.post(routenames.loginroute,{email,password})
+                dispatch(loginaction(datainfo?.data?.data)).finally(()=>{
+                    setisload(false)
+                    setError("Logged in Successfully")
+                    settype(true)
+                })
+              
             }
             else
             {
                 setError("Invalid Credentials")
-                setisload(false)
                 settype(false)
-           
+                setisload(false)
             }
         }
-        catch{
+        catch(e){
             setError("Try again later")
+            settype(false)   
             setisload(false)
-            settype(false)
-           
         }
+      
     }
     const callbacksubmit=()=>{
         setissubmit(false)
@@ -51,8 +58,7 @@ export default function Login({navigation}) {
   return (
     <ScrollView style={styles.mnonb} showsVerticalScrollIndicator={false}>
      <MessageCard type={type} message={Error} show={issubmit} callshow={callbacksubmit}/>
-     <View style={{display:"flex",flexDirection:"row",marginTop:rp(5),marginHorizontal:rp(2)}}>
-        
+     <View style={{display:"flex",flexDirection:"row",marginTop:rp(5),marginHorizontal:rp(2)}}>  
      <Pressable onPress={()=>navigation.pop()} style={styles.btn}>
      <IonicIcon name="arrow-back" size={24} color={colors.white} />
      </Pressable>
@@ -78,7 +84,7 @@ export default function Login({navigation}) {
      <View style={[{marginBottom:rp(5),zIndex:999},styles.centertext]}>
                 <Pressable 
                 disabled={issubmit} 
-                onPress={()=>navigation.navigate("home")} style={{backgroundColor:colors.black,paddingHorizontal:rp(8),paddingVertical:rp(1),borderRadius:rp(3)}}>
+                onPress={handleform} style={{backgroundColor:colors.black,paddingHorizontal:rp(8),paddingVertical:rp(1),borderRadius:rp(3)}}>
                    {
                         isload?
                         <ActivityIndicator size={30} color={colors.white}/>

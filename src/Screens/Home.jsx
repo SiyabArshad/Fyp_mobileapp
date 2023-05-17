@@ -9,14 +9,34 @@ import { Avatar } from 'react-native-elements';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import Loading from "../Components/Loading"
 import Enrollments from '../Components/Enrollments';
+import { useSelector,useDispatch } from 'react-redux';
+import { getProfile } from '../redux/profile/actions';
+import { getEnrollmentdata } from '../redux/enrollments/action';
+import { useIsFocused } from '@react-navigation/native';
+import api from '../configs/api';
+import routenames from '../configs/routes';
 export default function Home({navigation}) {
+    const focus=useIsFocused()
     const [isload,setisload]=React.useState(false)
-    React.useEffect(()=>{
+    const dispatch=useDispatch()
+    const userinfo=useSelector(state=>state?.authReducer)
+    const {profile}=useSelector(state=>state?.profileReducer)
+    const enrs=useSelector(state=>state?.enrollmentReducer)
+    const token=userinfo?.currentUser?.token
+    const getenrollments=async()=>{
       setisload(true)
-      setTimeout(() => {
-        setisload(false)
-      }, 3000);
-    },[])
+     await Promise.all([dispatch(getEnrollmentdata({token,id:profile?.id})),dispatch(getProfile({token}))])
+      setisload(false)
+    }
+    React.useEffect(()=>{
+      if(focus)
+      {
+        getenrollments()
+      }
+    },[focus])
+    React.useEffect(()=>{
+        getenrollments()
+     },[])
    return (
     <View style={styles.mnonb}>
  <Loading visible={isload}/>
@@ -25,9 +45,9 @@ export default function Home({navigation}) {
 </View>
 <View style={{display:"flex",flexDirection:"row",alignItems:"center",marginVertical:rp(2)}}>
    <Text style={{fontSize:rp(3),fontFamily:fonts.Nextrabold}}>Welcome!</Text>
-   <Text style={{fontSize:rp(3),fontFamily:fonts.Nregular,marginLeft:5}}>Ahdmed Ppik</Text>
+   <Text style={{fontSize:rp(3),fontFamily:fonts.Nregular,marginLeft:5}}>{profile?.name}</Text>
 </View>
-<Enrollments navigation={navigation}/>
+<Enrollments enrollments={enrs?.data} navigation={navigation}/>
 
     </View>
   )

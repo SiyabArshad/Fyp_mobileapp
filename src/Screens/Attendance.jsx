@@ -10,12 +10,21 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import Loading from "../Components/Loading"
 import Enrollments from '../Components/Enrollments';
 import AttendanceChart from '../Components/AttendanceChart';
+import { useSelector,useDispatch } from 'react-redux';
+import { getProfile } from '../redux/profile/actions';
+import { useIsFocused } from '@react-navigation/native';
+import api from '../configs/api';
+import routenames from '../configs/routes';
+import axios from 'axios';
 export default function Attendance({navigation,route}) {
-    const className=route?.params?.classname
+    const classinfo=route?.params?.class
     const [isload,setisload]=React.useState(false)
     const [attendance,setattendance]=React.useState(null)
     const [selecteddate,setselecteddate]=React.useState(null)
     const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
+    const userinfo=useSelector(state=>state?.authReducer)
+    const token=userinfo?.currentUser?.token
+    const focus=useIsFocused()
     const showDatePicker = () => {
       setDatePickerVisibility(true);
     };
@@ -29,12 +38,27 @@ export default function Attendance({navigation,route}) {
       setselecteddate(tempdate)
   
     };
-    React.useEffect(()=>{
+    const getattendanceall=async()=>{
       setisload(true)
-      setTimeout(() => {
+      try{
+        const {data} =await api.get(`${routenames.allattendance}?token=${token}`,{enrollmentId:classinfo?.id}) 
+        console.log(data)
+        setattendance(data?.data)
+       }
+      catch(e){
+        console.log(e)
+      }
+      finally{
         setisload(false)
-      }, 3000);
-    },[])
+      }
+      
+    }
+    React.useEffect(()=>{
+      if(focus)
+      {
+        getattendanceall()
+      }
+    },[focus])
   return (
 
     <SafeAreaView style={{flex:1}}>
@@ -48,7 +72,7 @@ export default function Attendance({navigation,route}) {
         customHeaderStyle={{ backgroundColor: colors.green }}
       />
       <View style={{marginBottom:rp(1),marginTop:Platform.OS==='android'?rp(6):rp(1)}}>
-      <Text style={{fontSize:rp(3),fontFamily:fonts.Nblack,color:colors.black}}>{className&&className} Class</Text>     
+      <Text style={{fontSize:rp(3),fontFamily:fonts.Nblack,color:colors.black}}>{classinfo&&classinfo?.class?.classname} Class</Text>     
         <View style={{display:"flex",flexDirection:"row",justifyContent:"space-between",alignItems:"center"}}>
    <Text style={{fontSize:rp(2),fontFamily:fonts.Nextrabold,color:colors.green}}>Check Your Attendance</Text>
    <TouchableOpacity onPress={showDatePicker}>

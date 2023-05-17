@@ -22,14 +22,14 @@ function getRandomNumber() {
   return Math.floor(Math.random() * 8);
 }
 
-export default function Enrollments({navigation}) {
+export default function Enrollments({navigation,enrollments}) {
   const enrolls = ['Computer Architecture', 'OOP', 'Dld', 'Big Data'];
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
     <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center' }}>
-        {enrolls ? (
-          enrolls.map((item, i) => (
+        {enrollments? (
+          enrollments?.map((item, i) => (
             <TouchableOpacity
               key={i}
               style={{
@@ -42,9 +42,9 @@ export default function Enrollments({navigation}) {
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
-              onPress={()=>navigation.navigate("attendance",{classname:item})}
+              onPress={()=>navigation.navigate("attendance",{class:item})}
             >
-              <Text style={{ color: colors.white, fontFamily: fonts.Rbold, textAlign: 'center' }}>{item}</Text>
+              <Text style={{ color: colors.white, fontFamily: fonts.Rbold, textAlign: 'center' }}>{item?.class?.classname}</Text>
             </TouchableOpacity>
           ))
         ) : (

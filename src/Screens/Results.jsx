@@ -7,9 +7,18 @@ import { RFPercentage as rp, RFValue as rf } from "react-native-responsive-fonts
 import IonicIcon from 'react-native-vector-icons/Ionicons';
 import Loading from "../Components/Loading"
 import ResultModal from '../Components/ResultModal';
+import { useSelector,useDispatch } from 'react-redux';
+import { getProfile } from '../redux/profile/actions';
+import { useIsFocused } from '@react-navigation/native';
+
 export default function Results({navigation}) {
+  const focus=useIsFocused()
     const [isload,setisload]=React.useState(false)
+    const dispatch=useDispatch()
+    const userinfo=useSelector(state=>state?.authReducer)
+    const token=userinfo?.currentUser?.token
     const [resultshown,setresultshown]=React.useState(false)
+    
     const closemodal=(state)=>{
     setresultshown(state)
   }
@@ -33,7 +42,7 @@ export default function Results({navigation}) {
 <ScrollView showsVerticalScrollIndicator={false}>
 {
     [1,2,3,4,5].map((item,i)=>(
-        <View style={{borderWidth:1,borderColor:colors.green,marginBottom:rp(1),paddingHorizontal:rp(2),paddingVertical:rp(1.7),borderRadius:rp(1),display:"flex",flexDirection:"row",alignItems:"center",justifyContent:"space-between"}}>
+        <View key={i} style={{borderWidth:1,borderColor:colors.green,marginBottom:rp(1),paddingHorizontal:rp(2),paddingVertical:rp(1.7),borderRadius:rp(1),display:"flex",flexDirection:"row",alignItems:"center",justifyContent:"space-between"}}>
             <Text style={{color:colors.black,fontFamily:fonts.Nregular}}>Mid Term Results</Text>
             <TouchableOpacity onPress={()=>{
               setresultshown(true)
