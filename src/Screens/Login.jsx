@@ -6,10 +6,13 @@ import colors from '../configs/colors'
 import { RFPercentage as rp, RFValue as rf } from "react-native-responsive-fontsize";
 import IonicIcon from 'react-native-vector-icons/Ionicons';
 import MessageCard from '../Components/MessageCard';
-import api from "../configs/api"
 import routenames from '../configs/routes';
 import { useSelector,useDispatch } from 'react-redux';
 import { loginaction } from '../redux/auth/authaction';
+import postData from '../configs/fetchApi';
+import axios from 'axios';
+import origin from "../configs/api"
+
 export default function Login({navigation}) {
     const dispatch=useDispatch()
     const[email,setemail]=React.useState("")
@@ -20,23 +23,18 @@ export default function Login({navigation}) {
     const [type,settype]=React.useState(false)
     const handleform=async()=>{
         setisload(true)
-        setissubmit(true)
         try{
             if(email.length===0&&password.length===0)
             {
             setError("Some Feilds are Missing")
-            setisload(false)
             settype(false)
             }
             else if(email.length>10&&password.length>5)
             {
-                const datainfo=await api.post(routenames.loginroute,{email,password})
-                dispatch(loginaction(datainfo?.data?.data)).finally(()=>{
-                    setisload(false)
+                const datainfo=await axios.post(`${origin}${routenames.loginroute}`,{email,password})
+                    dispatch(loginaction(datainfo?.data?.data))
                     setError("Logged in Successfully")
                     settype(true)
-                })
-              
             }
             else
             {
@@ -48,6 +46,9 @@ export default function Login({navigation}) {
         catch(e){
             setError("Try again later")
             settype(false)   
+        }
+        finally{
+            setissubmit(true)
             setisload(false)
         }
       

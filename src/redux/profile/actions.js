@@ -1,10 +1,12 @@
 import ProfileConstants from "./constants";
-import api from "../../configs/api";
 import routenames from "../../configs/routes";
+import origin from "../../configs/api";
+import axios from "axios";
+
 export const getProfile=(payload)=>{
     return async(dispatch)=>{
         try{
-            const {data}=await api.get(`${routenames.getprofile}?token=${payload?.token}`)
+            const {data}=await axios.get(`${origin}${routenames.getprofile}?token=${payload?.token}`)
         dispatch({
             type:ProfileConstants.getProfile,
             payload:data.data

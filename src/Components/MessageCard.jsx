@@ -1,11 +1,9 @@
 import { View, Text,Modal,TouchableOpacity,Pressable,Image,StyleSheet } from 'react-native'
 import React from 'react'
-import LottieView from 'lottie-react-native';
-import colors from '../configs/colors';
-import fonts from '../configs/fonts';
+import colors from '../configs/colors'
+import Icon1 from "react-native-vector-icons/Ionicons"
+import Icon2 from "react-native-vector-icons/Foundation"
 export default function MessageCard({show,callshow,message,type}) {
-    //type true mean succsess
-    //type false mean failure
   return (
     <Modal transparent visible={show}>
     <View style={{flex:1,justifyContent:"center",alignItems:"center",backgroundColor:"rgba(0,0,0,.4)"}}>
@@ -26,24 +24,19 @@ export default function MessageCard({show,callshow,message,type}) {
     alignItems:"center"
     ,paddingVertical:20
     }}>
- <View style={{ width: 70, height: 70 }}>
+ <View style={{ display:"flex",alignItems:"center",justifyContent:"center"}}>
       {
         type?
-        <LottieView
-        source={require('../../assets/animations/confirm.json')}
-        autoPlay
-        loop={false}
-      />:
-      <LottieView
-        source={require('../../assets/animations/error.json')}
-        autoPlay
-        loop={false}
-      />
+        <Icon1 name="checkmark-done-circle" size={42} color={colors.green} />
+        :
+        <Icon2 name="alert" size={42} color={colors.red} />
       }
     </View>
-     <Text style={{fontSize:19,fontFamily:fonts.Nregular,color:colors.black,marginVertical:10}}>{message&&message}</Text>
-<Pressable onPress={callshow} style={{backgroundColor:colors.black,width:"60%",paddingHorizontal:10,paddingVertical:7,display:"flex",justifyContent:"center",alignItems:"center",borderRadius:10}}>
-    <Text style={{fontFamily:fonts.Nregular,color:colors.white,fontSize:18}}>Ok</Text>
+     <Text style={{fontSize:19,color:colors.black,marginVertical:10}}>{message&&message}</Text>
+<Pressable onPress={()=>{
+  callshow()
+}} style={{backgroundColor:colors.black,width:"60%",paddingHorizontal:10,paddingVertical:7,display:"flex",justifyContent:"center",alignItems:"center",borderRadius:10}}>
+    <Text style={{color:colors.white,fontSize:18}}>Ok</Text>
 </Pressable>
         </View>
     </View>

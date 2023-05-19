@@ -13,30 +13,27 @@ import { useSelector,useDispatch } from 'react-redux';
 import { getProfile } from '../redux/profile/actions';
 import { getEnrollmentdata } from '../redux/enrollments/action';
 import { useIsFocused } from '@react-navigation/native';
-import api from '../configs/api';
+import origin from '../configs/api';
 import routenames from '../configs/routes';
+import axios from "axios"
 export default function Home({navigation}) {
     const focus=useIsFocused()
     const [isload,setisload]=React.useState(false)
     const dispatch=useDispatch()
     const userinfo=useSelector(state=>state?.authReducer)
     const {profile}=useSelector(state=>state?.profileReducer)
-    const enrs=useSelector(state=>state?.enrollmentReducer)
+    const {data}=useSelector(state=>state?.enrollmentReducer)
     const token=userinfo?.currentUser?.token
-    const getenrollments=async()=>{
+    const fetchinfo=async()=>{
       setisload(true)
-     await Promise.all([dispatch(getEnrollmentdata({token,id:profile?.id})),dispatch(getProfile({token}))])
+      await dispatch(getProfile({token}))
+      await dispatch(getEnrollmentdata({token,id:profile?.id}))
       setisload(false)
     }
-    React.useEffect(()=>{
-      if(focus)
-      {
-        getenrollments()
-      }
-    },[focus])
-    React.useEffect(()=>{
-        getenrollments()
-     },[])
+     React.useEffect(()=>{
+      fetchinfo()
+   },[profile?.id])
+   
    return (
     <View style={styles.mnonb}>
  <Loading visible={isload}/>
@@ -47,7 +44,7 @@ export default function Home({navigation}) {
    <Text style={{fontSize:rp(3),fontFamily:fonts.Nextrabold}}>Welcome!</Text>
    <Text style={{fontSize:rp(3),fontFamily:fonts.Nregular,marginLeft:5}}>{profile?.name}</Text>
 </View>
-<Enrollments enrollments={enrs?.data} navigation={navigation}/>
+<Enrollments enrollments={data} navigation={navigation}/>
 
     </View>
   )
