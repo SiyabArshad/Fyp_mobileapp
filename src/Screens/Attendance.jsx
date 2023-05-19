@@ -1,4 +1,4 @@
-import { View, Text,Modal,TouchableOpacity,Pressable,Image,StyleSheet,ImageBackground,Dimensions,Platform,Linking,ActivityIndicator,TextInput,ScrollView,FlatList,SafeAreaView } from 'react-native'
+import { View, Text,Modal,TouchableOpacity,Pressable,Image,StyleSheet,ImageBackground,Dimensions,Platform,Linking,ActivityIndicator,TextInput,ScrollView,FlatList,SafeAreaView,Alert } from 'react-native'
 import React from 'react'
 import LottieView from 'lottie-react-native';
 import fonts from "../configs/fonts"
@@ -13,14 +13,17 @@ import AttendanceChart from '../Components/AttendanceChart';
 import { useSelector,useDispatch } from 'react-redux';
 import { getProfile } from '../redux/profile/actions';
 import { useIsFocused } from '@react-navigation/native';
-import api from '../configs/api';
+import origin from '../configs/api';
 import routenames from '../configs/routes';
 import axios from 'axios';
+import { changeFormat } from '../configs/formatedate';
+import AttendanceModal from '../Components/AttendanceModal';
 export default function Attendance({navigation,route}) {
     const classinfo=route?.params?.class
     const [isload,setisload]=React.useState(false)
     const [attendance,setattendance]=React.useState(null)
     const [selecteddate,setselecteddate]=React.useState(null)
+    const [attendancebydate,setattendancebydate]=React.useState([])
     const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
     const userinfo=useSelector(state=>state?.authReducer)
     const token=userinfo?.currentUser?.token
@@ -33,16 +36,16 @@ export default function Attendance({navigation,route}) {
       setDatePickerVisibility(false);
     };
     const handleConfirm = (date) => {
-      const tempdate=new Date(date).toDateString()
+      const temp=date.formattedDate = date.toISOString().split('T')[0];
       hideDatePicker();
-      setselecteddate(tempdate)
+      setselecteddate(temp)
+      filterattendancewithdate(temp)
   
     };
     const getattendanceall=async()=>{
       setisload(true)
       try{
-        const {data} =await api.get(`${routenames.allattendance}?token=${token}`,{enrollmentId:classinfo?.id}) 
-        console.log(data)
+        const {data} =await axios.get(`${origin}${routenames.allattendance}?token=${token}&enrollmentId=${classinfo?.id}`) 
         setattendance(data?.data)
        }
       catch(e){
@@ -59,9 +62,25 @@ export default function Attendance({navigation,route}) {
         getattendanceall()
       }
     },[focus])
+    const closemodal=()=>{
+      setselecteddate(null)
+    }
+    const filterattendancewithdate=(dat)=>{
+        let att=[]
+        att=attendance?.attendance.filter((item)=>item?.date===dat)
+        if(att)
+        {
+          setattendancebydate(att)
+        }
+        if(att.length===0)
+        {
+          Alert.alert("No Record Exist")
+        }
+    }
   return (
 
     <SafeAreaView style={{flex:1}}>
+      <AttendanceModal att={attendancebydate} visibility={selecteddate===null||attendancebydate.length===0?false:true} closemodal={closemodal}/>
         <View style={{flex:1,paddingHorizontal:rp(3),marginBottom:rp(3)}}>
         <Loading visible={isload}/>
        <DateTimePickerModal
@@ -81,34 +100,7 @@ export default function Attendance({navigation,route}) {
 </View>
 </View>
 <ScrollView showsVerticalScrollIndicator={false}>
-      {
-        selecteddate&&<View style={{flex:1,display:"flex",alignItems:"center",justifyContent:"center",borderWidth:1,borderColor:colors.black,marginTop:rp(2)}}>
-        <View style={{width:"90%",display:"flex",alignItems:"center",justifyContent:"center",paddingVertical:rp(2)}}>
-        <Avatar
-          size={100}
-          rounded
-           source={{ uri: "https://randomuser.me/api/portraits/men/36.jpg" }}
-          />
-        </View>
-        <View style={{width:"100%",display:"flex",flexDirection:"row",alignItems:"center",justifyContent:"space-between",paddingVertical:rp(2),paddingHorizontal:rp(2),borderTopWidth:1,borderBottomWidth:1,borderColor:colors.black}}>
-              <Text style={{color:colors.black,fontSize:rp(2.4),fontFamily:fonts.Nbold}}>Name</Text>
-              <Text style={{color:colors.black,fontFamily:fonts.Nregular,fontSize:rp(2.2)}}>Ahmed PPik</Text>
-        </View>
-        <View style={{width:"100%",display:"flex",flexDirection:"row",alignItems:"center",justifyContent:"space-between",paddingHorizontal:rp(2),paddingVertical:rp(2),borderBottomWidth:1,borderColor:colors.black}}>
-              <Text style={{color:colors.black,fontSize:rp(2.4),fontFamily:fonts.Nbold}}>Class</Text>
-              <Text style={{color:colors.black,fontFamily:fonts.Nregular,fontSize:rp(2.2)}}>9th</Text>
-        </View>
-        <View style={{width:"100%",display:"flex",flexDirection:"row",alignItems:"center",justifyContent:"space-between",paddingHorizontal:rp(2),paddingVertical:rp(2),borderBottomWidth:1,borderColor:colors.black}}>
-              <Text style={{color:colors.black,fontSize:rp(2.4),fontFamily:fonts.Nbold}}>Date</Text>
-              <Text style={{color:colors.black,fontFamily:fonts.Nregular,fontSize:rp(2.2)}}>11-April-2023</Text>
-        </View>
-        <View style={{width:"100%",display:"flex",flexDirection:"row",alignItems:"center",justifyContent:"space-between",paddingHorizontal:rp(2),paddingVertical:rp(2)}}>
-              <Text style={{color:colors.black,fontSize:rp(2.4),fontFamily:fonts.Nbold}}>Status</Text>
-              <Text style={{color:colors.red,fontFamily:fonts.Nregular,fontSize:rp(2.2)}}>Absent</Text>
-        </View>
-  </View>
-      }
-      <AttendanceChart/>
+      <AttendanceChart data={attendance}/>
 </ScrollView>
 </View>
     </SafeAreaView>

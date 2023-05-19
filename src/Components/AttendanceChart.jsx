@@ -2,9 +2,9 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import { PieChart } from 'react-native-chart-kit';
 import colors from "../configs/colors"
-const AttendanceChart = () => {
-  const absentValue = 50;
-  const presentValue = 110;
+const AttendanceChart = ({data}) => {
+  const absentValue = data?.totalAbsent||0;
+  const presentValue = data?.totalPresent||0;
   const totalAttendance = absentValue + presentValue;
 
   const pieData = [
