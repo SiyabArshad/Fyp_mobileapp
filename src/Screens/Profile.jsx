@@ -30,7 +30,7 @@ export default function Profile({navigation}) {
       setisload(true)
     dispatch(getProfile({token})).finally(()=>{setisload(false)})
     }
-  },[])
+  },[focus])
   return (
     <View style={styles.mnonb}>
        <Loading visible={isload}/>

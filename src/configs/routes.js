@@ -1,7 +1,7 @@
 const routenames={
     loginroute:"/uetcs/digischool/login",
     getprofile:"/uetcs/digischool/student",
-    updateprofile:"/uetcs/digischool/updateadminprofile",
+    updateprofile:"/uetcs/digischool/updatestudent",
     resetUser:"/uetcs/digischool/reset",
     getenrollments:"/uetcs/digischool/enrollment/student",
     passlink:"/uetcs/digischool/passlink",
