@@ -38,10 +38,6 @@ export default function AttendanceModal({closemodal=()=>{},visibility,att}) {
               <Text style={{color:colors.black,fontSize:rp(2.4),fontFamily:fonts.Nbold}}>Name</Text>
               <Text style={{color:colors.black,fontFamily:fonts.Nregular,fontSize:rp(2.2)}}>{profile?.name}</Text>
         </View>
-        {/* <View style={{width:"100%",display:"flex",flexDirection:"row",alignItems:"center",justifyContent:"space-between",paddingHorizontal:rp(2),paddingVertical:rp(2),borderBottomWidth:1,borderColor:colors.black}}>
-              <Text style={{color:colors.black,fontSize:rp(2.4),fontFamily:fonts.Nbold}}>Class</Text>
-              <Text style={{color:colors.black,fontFamily:fonts.Nregular,fontSize:rp(2.2)}}>9th</Text>
-        </View> */}
         <View style={{width:"100%",display:"flex",flexDirection:"row",alignItems:"center",justifyContent:"space-between",paddingHorizontal:rp(2),paddingVertical:rp(2),borderBottomWidth:1,borderColor:colors.black}}>
               <Text style={{color:colors.black,fontSize:rp(2.4),fontFamily:fonts.Nbold}}>Date</Text>
               <Text style={{color:colors.black,fontFamily:fonts.Nregular,fontSize:rp(2.2)}}>{att[0]?.date}</Text>

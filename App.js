@@ -9,7 +9,9 @@ import Onboard from './src/Screens/Onboard';
 import Login from './src/Screens/Login';
 import Forgotpass from './src/Screens/Forgotpass';
 import UpdateProfile from './src/Screens/UpdateProfile';
+import Menu from './src/Screens/Menu';
 import Home from './src/Screens/Home';
+import Results from './src/Screens/Results';
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { BottomTabBarProps, BottomTabNavigationOptions, createBottomTabNavigator } from '@react-navigation/bottom-tabs'
@@ -86,6 +88,8 @@ const Routes=()=>{
     <Stack.Screen name='home' component={TabNavigation}/>
     <Stack.Screen name='attendance' component={Attendance}/>
     <Stack.Screen name='edit' component={UpdateProfile}/>
+    <Stack.Screen name="menu" component={Menu} />
+    <Stack.Screen name='result' component={Results}/>
   
   </Stack.Navigator>
   )

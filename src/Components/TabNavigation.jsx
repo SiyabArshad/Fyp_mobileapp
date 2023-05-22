@@ -37,8 +37,6 @@ const TabNavigation = () => {
 
           if (route.name === 'homescreen') {
             iconName = focused ? 'home' : 'home-outline';
-          }else if (route.name === 'result') {
-            iconName = focused ? 'md-notifications-circle-outline' : 'md-notifications-circle';
           } else if (route.name === 'profile') {
             iconName = focused ? 'md-person-circle' : 'md-person-circle-outline';
           }
@@ -58,13 +56,7 @@ const TabNavigation = () => {
           tabBarShowLabel: false,
         }}
       />
-      <Tab.Screen
-        name="result"
-        component={Results}
-        options={{
-          tabBarShowLabel: false,
-        }}
-      />
+      
       <Tab.Screen
         name="profile"
         component={Profile}

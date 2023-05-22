@@ -6,7 +6,19 @@ import colors from '../configs/colors'
 import { RFPercentage as rp, RFValue as rf } from "react-native-responsive-fontsize";
 import IonicIcon from 'react-native-vector-icons/Ionicons';
 import { Avatar } from 'react-native-elements';
-export default function ResultModal({closemodal=()=>{}}) {
+import { useSelector,useDispatch } from 'react-redux';
+import { getProfile } from '../redux/profile/actions';
+export default function ResultModal({closemodal=()=>{},data}) {
+      const userinfo=useSelector(state=>state?.authReducer)
+      const {profile}=useSelector(state=>state?.profileReducer)
+      const dispatch=useDispatch()
+      const token=userinfo?.currentUser?.token
+      const fetchinfo=async()=>{
+          await dispatch(getProfile({token}))
+        }
+         React.useEffect(()=>{
+          fetchinfo()
+       },[])
   return (
     <Modal transparent visible={true}>
       <View style={{backgroundColor:"rgba(255,255,255,0.96)",flex:1}}>
@@ -24,19 +36,21 @@ export default function ResultModal({closemodal=()=>{}}) {
         </View>
         <View style={{width:"100%",display:"flex",flexDirection:"row",alignItems:"center",justifyContent:"space-between",paddingVertical:rp(2),paddingHorizontal:rp(2),borderTopWidth:1,borderBottomWidth:1,borderColor:colors.black}}>
               <Text style={{color:colors.black,fontSize:rp(2.4),fontFamily:fonts.Nbold}}>Name</Text>
-              <Text style={{color:colors.black,fontFamily:fonts.Nregular,fontSize:rp(2.2)}}>Ahmed PPik</Text>
+              <Text style={{color:colors.black,fontFamily:fonts.Nregular,fontSize:rp(2.2)}}>{profile?.name}</Text>
         </View>
         <View style={{width:"100%",display:"flex",flexDirection:"row",alignItems:"center",justifyContent:"space-between",paddingHorizontal:rp(2),paddingVertical:rp(2),borderBottomWidth:1,borderColor:colors.black}}>
-              <Text style={{color:colors.black,fontSize:rp(2.4),fontFamily:fonts.Nbold}}>Class</Text>
-              <Text style={{color:colors.black,fontFamily:fonts.Nregular,fontSize:rp(2.2)}}>9th</Text>
+              <Text style={{color:colors.black,fontSize:rp(2.4),fontFamily:fonts.Nbold}}>Total Marks</Text>
+              <Text style={{color:colors.black,fontFamily:fonts.Nregular,fontSize:rp(2.2)}}>{data?.totalmarks}</Text>
         </View>
+       
         <View style={{width:"100%",display:"flex",flexDirection:"row",alignItems:"center",justifyContent:"space-between",paddingHorizontal:rp(2),paddingVertical:rp(2),borderBottomWidth:1,borderColor:colors.black}}>
-              <Text style={{color:colors.black,fontSize:rp(2.4),fontFamily:fonts.Nbold}}>Date</Text>
-              <Text style={{color:colors.black,fontFamily:fonts.Nregular,fontSize:rp(2.2)}}>11-April-2023</Text>
+              <Text style={{color:colors.black,fontSize:rp(2.4),fontFamily:fonts.Nbold}}>Obtained Marks</Text>
+              <Text style={{color:colors.black,fontFamily:fonts.Nregular,fontSize:rp(2.2)}}>{data?.obtainedmarks}</Text>
         </View>
+       
         <View style={{width:"100%",display:"flex",flexDirection:"row",alignItems:"center",justifyContent:"space-between",paddingHorizontal:rp(2),paddingVertical:rp(2)}}>
               <Text style={{color:colors.black,fontSize:rp(2.4),fontFamily:fonts.Nbold}}>Grade</Text>
-              <Text style={{color:colors.red,fontFamily:fonts.Nregular,fontSize:rp(2.2)}}>A</Text>
+              <Text style={{color:colors.red,fontFamily:fonts.Nregular,fontSize:rp(2.2)}}>{data?.grade}</Text>
         </View>
   </View>
  

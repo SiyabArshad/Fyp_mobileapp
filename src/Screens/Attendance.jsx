@@ -18,6 +18,8 @@ import routenames from '../configs/routes';
 import axios from 'axios';
 import { changeFormat } from '../configs/formatedate';
 import AttendanceModal from '../Components/AttendanceModal';
+import Entypo from 'react-native-vector-icons/Entypo';
+
 export default function Attendance({navigation,route}) {
     const classinfo=route?.params?.class
     const [isload,setisload]=React.useState(false)
@@ -91,9 +93,14 @@ export default function Attendance({navigation,route}) {
         customHeaderStyle={{ backgroundColor: colors.green }}
       />
       <View style={{marginBottom:rp(1),marginTop:Platform.OS==='android'?rp(6):rp(1)}}>
-      <Text style={{fontSize:rp(3),fontFamily:fonts.Nblack,color:colors.black}}>{classinfo&&classinfo?.class?.classname} Class</Text>     
+     
         <View style={{display:"flex",flexDirection:"row",justifyContent:"space-between",alignItems:"center"}}>
+        <View style={{display:"flex",flexDirection:"row",alignItems:"center"}}>
+        <TouchableOpacity onPress={()=>navigation.pop()} style={{display:"flex",justifyContent:"center",alignItems:"center",margin:rp(2)}}>
+        <Entypo name="chevron-left" size={24} color={colors.green}/>
+        </TouchableOpacity>
    <Text style={{fontSize:rp(2),fontFamily:fonts.Nextrabold,color:colors.green}}>Check Your Attendance</Text>
+        </View>
    <TouchableOpacity onPress={showDatePicker}>
     <FIcon name='calendar' size={32} color={colors.green}/>
    </TouchableOpacity>

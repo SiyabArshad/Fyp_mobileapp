@@ -36,13 +36,13 @@ export default function Enrollments({navigation,enrollments}) {
                 height: 150,
                 width: 130,
                 borderRadius: 10,
-                backgroundColor: randomColor[getRandomNumber()] || 'green',
+                backgroundColor: colors.green,
                 margin: 5,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
-              onPress={()=>navigation.navigate("attendance",{class:item})}
+              onPress={()=>navigation.navigate("menu",{class:item})}
             >
               <Text style={{ color: colors.white, fontFamily: fonts.Rbold, textAlign: 'center' }}>{item?.class?.classname}</Text>
             </TouchableOpacity>
