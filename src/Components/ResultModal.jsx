@@ -31,7 +31,7 @@ export default function ResultModal({closemodal=()=>{},data}) {
         <Avatar
           size={100}
           rounded
-           source={{ uri: "https://randomuser.me/api/portraits/men/36.jpg" }}
+           source={{ uri: profile?.profile===''?"https://randomuser.me/api/portraits/men/36.jpg":profile?.profile  }}
           />
         </View>
         <View style={{width:"100%",display:"flex",flexDirection:"row",alignItems:"center",justifyContent:"space-between",paddingVertical:rp(2),paddingHorizontal:rp(2),borderTopWidth:1,borderBottomWidth:1,borderColor:colors.black}}>

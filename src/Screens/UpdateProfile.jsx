@@ -22,7 +22,7 @@ export default function UpdateProfile({navigation}) {
     const [issubmit,setissubmit]=React.useState(false)
     const [Error,setError]=React.useState('')
     const [type,settype]=React.useState(false)
-    const [image, setImage] = React.useState(profile?.profile?profile?.profile:null);
+    const [image, setImage] = React.useState(profile?.profile?profile?.profile:'');
     const pickImage = async () => {
         const result = await ImagePicker.launchImageLibraryAsync({
           mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -93,36 +93,81 @@ export default function UpdateProfile({navigation}) {
     //         setisload(false)
     //     }
     // }
+    // const handleform = async () => {
+    //     setisload(true);
+    //     try {
+    //       let downloadURL = image;
+          
+    //       if (image !== '' || image !== null) {
+    //         const storageRef = ref(storage, `fypapp/${profile?.name}profile+image1${new Date().toLocaleString()}`);
+    //         const img = await fetch(image);
+    //         const bytes = await img.blob();
+    //         const snapshot = await uploadBytes(storageRef, bytes);
+    //         downloadURL = await getDownloadURL(snapshot.ref);
+    //         await axios.put(`${origin}${routenames.updateprofile}?token=${userinfo?.currentUser?.token}`, {
+    //           profile: downloadURL,
+    //           name: name
+    //         });
+    //         setError("Updated Successfully");
+    //         settype(true);
+          
+    //       }
+    //       else
+    //       {
+    //       await axios.put(`${origin}${routenames.updateprofile}?token=${userinfo?.currentUser?.token}`, {
+    //         name: name
+    //       });
+    //       setError("Updated Successfully");
+    //       settype(true);
+    //     }
+    //     } catch (e) {
+    //       console.log("Error:", e);
+    //       setError("Try again later");
+    //       settype(false);
+    //     } finally {
+    //       setissubmit(true);
+    //       setisload(false);
+    //     }
+
+    
+    //   };
+
     const handleform = async () => {
-        setisload(true);
-        try {
-          let downloadURL = image;
-          
-          if (image !== '' || image !== null) {
-            const storageRef = ref(storage, `fypapp/${profile?.name}profile+image1${new Date().toLocaleString()}`);
-            const img = await fetch(image);
-            const bytes = await img.blob();
-            const snapshot = await uploadBytes(storageRef, bytes);
-            downloadURL = await getDownloadURL(snapshot.ref);
-          }
-          
+      setisload(true);
+      try {
+        // let downloadURL = image;
+    
+        if (image && image !== '') {
+          const storageRef = ref(
+            storage,
+            `fypapp/${profile?.name}profile+image1${new Date().toLocaleString()}`
+          );
+          const img = await fetch(image);
+          const bytes = await img.blob();
+          const snapshot = await uploadBytes(storageRef, bytes);
+          const downloadURL = await getDownloadURL(snapshot.ref);
           await axios.put(`${origin}${routenames.updateprofile}?token=${userinfo?.currentUser?.token}`, {
             profile: downloadURL,
             name: name
           });
-      
-          setError("Updated Successfully");
-          settype(true);
-        } catch (e) {
-          console.log("Error:", e);
-          setError("Try again later");
-          settype(false);
-        } finally {
-          setissubmit(true);
-          setisload(false);
+        } else {
+          await axios.put(`${origin}${routenames.updateprofile}?token=${userinfo?.currentUser?.token}`, {
+            name: name
+          });
         }
-      };
-      
+    
+        setError("Updated Successfully");
+        settype(true);
+      } catch (e) {
+        console.log("Error:", e);
+        setError("Try again later");
+        settype(false);
+      } finally {
+        setissubmit(true);
+        setisload(false);
+      }
+    };
+    
     const callbacksubmit=()=>{
         setissubmit(false)
     }
