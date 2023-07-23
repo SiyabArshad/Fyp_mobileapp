@@ -11,6 +11,7 @@ import { useSelector,useDispatch } from 'react-redux';
 import { loginaction,logoutaction } from '../redux/auth/authaction';
 import Loading from "../Components/Loading"
 import axios from 'axios';
+
 import origin from "../configs/api"
 export default function Forgotpass({navigation}) {
     const [email,setemail]=React.useState("")
@@ -28,7 +29,7 @@ export default function Forgotpass({navigation}) {
             }
             else if(email.length>10)
             {
-                const {data}=await api.post(`${origin}${routenames.passlink}`,{email})
+                const {data}=await axios.post(`${origin}${routenames.passlink}`,{email})
                     settype(true) 
                     setError(data?.message)          
             }
@@ -39,6 +40,7 @@ export default function Forgotpass({navigation}) {
             }
         }
         catch(e){
+            console.log(e)
             settype(false)
             setError("Try again later")   
         }

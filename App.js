@@ -17,6 +17,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { BottomTabBarProps, BottomTabNavigationOptions, createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import TabNavigation from './src/Components/TabNavigation';
 import Attendance from './src/Screens/Attendance';
+import ForegroundNotification from './src/Components/ForegroundNotification';
 const Tab = createBottomTabNavigator()
 const Stack = createNativeStackNavigator();
 //redux imports and others
@@ -25,6 +26,8 @@ import store from './src/redux/store';
 import { useSelector,useDispatch } from 'react-redux';
 import {getCurrentuser } from './src/redux/auth/authaction';
 import colors from './src/configs/colors';
+import * as Notifications from 'expo-notifications';
+import Toast from 'react-native-toast-message'; 
 
 export default function App() {
   LogBox.ignoreAllLogs()
@@ -56,6 +59,7 @@ export default function App() {
   );
 }
 const Routes=()=>{
+  const [foregroundNotification, setForegroundNotification] = React.useState(null);
   const [isAuthenticated, setIsAuthenticated] = React.useState(false);
   const dispatch=useDispatch()
   const userinfo=useSelector(state=>state?.authReducer)
@@ -69,14 +73,51 @@ const Routes=()=>{
 
     }
   }
+
   React.useEffect(() => {
-    gettinguserstate()
+      // Request notification permissions on app start
+      (async () => {
+        const { status } = await Notifications.requestPermissionsAsync();
+        if (status !== 'granted') {
+          alert('You will not receive push notifications.');
+        }
+      })();
+  
+      const subscription = Notifications.addNotificationReceivedListener(notification => {
+        // Set the notification in the state
+        setForegroundNotification(notification);
+        console.log('Received notification:', notification);
+      });
+          // Request notification permissions on app start
+    (async () => {
+      const { status } = await Notifications.requestPermissionsAsync();
+      if (status !== 'granted') {
+        alert('You will not receive push notifications.');
+      }
+    })();
+
+    const backgroundSubscription = Notifications.addNotificationResponseReceivedListener(response => {
+      // Handle the notification response here (e.g., navigate to a specific screen)
+      console.log('Notification response:', response);
+    });
+
+    return () => {
+      // Clean up the subscription when the component is unmounted
+      subscription.remove();
+      backgroundSubscription.remove();
+    };
   }, []);
+  React.useEffect(()=>{
+    gettinguserstate()
+   
+  },[])
   if(loading)
   {
     return <View style={{flex:1,justifyContent:"center",alignItems:"center"}}><ActivityIndicator size={24} color={colors.green}/></View>
   }
   return(
+    <React.Fragment>
+      {
     userinfo?.isLoggedIn===false?
     <Stack.Navigator initialroute="onboard" screenOptions={{headerShown:false}} >
     <Stack.Screen name="onboard" component={Onboard} />
@@ -92,6 +133,9 @@ const Routes=()=>{
     <Stack.Screen name='result' component={Results}/>
   
   </Stack.Navigator>
+}
+<ForegroundNotification notification={foregroundNotification} />
+  </React.Fragment>
   )
 }
 const styles = StyleSheet.create({

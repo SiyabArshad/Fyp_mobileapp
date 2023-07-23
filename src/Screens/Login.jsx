@@ -12,6 +12,7 @@ import { loginaction } from '../redux/auth/authaction';
 import postData from '../configs/fetchApi';
 import axios from 'axios';
 import origin from "../configs/api"
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Login({navigation}) {
     const dispatch=useDispatch()
@@ -21,6 +22,8 @@ export default function Login({navigation}) {
     const [issubmit,setissubmit]=React.useState(false)
     const [Error,setError]=React.useState('')
     const [type,settype]=React.useState(false)
+   
+
     const handleform=async()=>{
         setisload(true)
         try{
@@ -31,7 +34,9 @@ export default function Login({navigation}) {
             }
             else if(email.length>10&&password.length>5)
             {
-                const datainfo=await axios.post(`${origin}${routenames.loginroute}`,{email,password})
+                    const datainfo=await axios.post(`${origin}${routenames.loginroute}`,{email,password})
+                    const jsonValue = JSON.stringify(datainfo?.data?.data);
+                    await AsyncStorage.setItem("digiSchool", jsonValue); 
                     dispatch(loginaction(datainfo?.data?.data))
                     setError("Logged in Successfully")
                     settype(true)
@@ -44,6 +49,7 @@ export default function Login({navigation}) {
             }
         }
         catch(e){
+            console.log(e)
             setError("Try again later")
             settype(false)   
         }

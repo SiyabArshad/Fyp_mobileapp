@@ -7,7 +7,9 @@ const routenames={
     passlink:"/uetcs/digischool/passlink",
     attendancebydata:"/uetcs/digischool/attendance/date",
     allattendance:"/uetcs/digischool/getattendance",
-    getallresults:"/uetcs/digischool/getresult"
+    getallresults:"/uetcs/digischool/getresult",
+    resetuser:"/uetcs/digischool/reset",
+
 }
 
 export default routenames

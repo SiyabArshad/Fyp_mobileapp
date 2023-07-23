@@ -16,6 +16,7 @@ import { useIsFocused } from '@react-navigation/native';
 import origin from '../configs/api';
 import routenames from '../configs/routes';
 import axios from "axios"
+import * as Notifications from 'expo-notifications';
 export default function Home({navigation}) {
     const focus=useIsFocused()
     const [isload,setisload]=React.useState(false)
@@ -30,10 +31,34 @@ export default function Home({navigation}) {
       await dispatch(getEnrollmentdata({token,id:profile?.id}))
       setisload(false)
     }
+     // Function to request notification permission
+const registerForPushNotificationsAsync = async () => {
+  const { status: existingStatus } = await Notifications.getPermissionsAsync();
+  let finalStatus = existingStatus;
+
+  if (existingStatus !== 'granted') {
+    const { status } = await Notifications.requestPermissionsAsync();
+    finalStatus = status;
+  }
+
+  if (finalStatus !== 'granted') {
+    console.log('Failed to get push token for push notification!');
+    return;
+  }
+
+  const token = (await Notifications.getExpoPushTokenAsync()).data;
+  await axios.put(`${origin}${routenames.resetUser}?token=${userinfo?.currentUser?.token}`, {
+    devicetoken: token
+  });
+
+};
      React.useEffect(()=>{
       fetchinfo()
    },[profile?.id])
-   
+   React.useEffect(()=>{
+    fetchinfo()
+      registerForPushNotificationsAsync()
+   },[])
    return (
     <View style={styles.mnonb}>
  <Loading visible={isload}/>
