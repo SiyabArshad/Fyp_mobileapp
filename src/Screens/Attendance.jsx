@@ -1,4 +1,4 @@
-import { View, Text,Modal,TouchableOpacity,Pressable,Image,StyleSheet,ImageBackground,Dimensions,Platform,Linking,ActivityIndicator,TextInput,ScrollView,FlatList,SafeAreaView,Alert } from 'react-native'
+import { RefreshControl,View, Text,Modal,TouchableOpacity,Pressable,Image,StyleSheet,ImageBackground,Dimensions,Platform,Linking,ActivityIndicator,TextInput,ScrollView,FlatList,SafeAreaView,Alert } from 'react-native'
 import React from 'react'
 import LottieView from 'lottie-react-native';
 import fonts from "../configs/fonts"
@@ -79,6 +79,12 @@ export default function Attendance({navigation,route}) {
           Alert.alert("No Record Exist")
         }
     }
+    const [refreshing, setRefreshing] = React.useState(false);
+   const handleRefresh=async()=>{
+    setRefreshing(true)
+    await getattendanceall()
+    setRefreshing(false)
+   }
   return (
 
     <SafeAreaView style={{flex:1}}>
@@ -106,7 +112,11 @@ export default function Attendance({navigation,route}) {
    </TouchableOpacity>
 </View>
 </View>
-<ScrollView showsVerticalScrollIndicator={false}>
+<ScrollView 
+refreshControl={
+  <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+}
+showsVerticalScrollIndicator={false}>
       <AttendanceChart data={attendance}/>
 </ScrollView>
 </View>

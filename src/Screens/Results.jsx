@@ -1,4 +1,4 @@
-import { View, Text,Modal,TouchableOpacity,Pressable,Image,StyleSheet,ImageBackground,Dimensions,Platform,Linking,ActivityIndicator,TextInput,ScrollView,FlatList } from 'react-native'
+import { RefreshControl,View, Text,Modal,TouchableOpacity,Pressable,Image,StyleSheet,ImageBackground,Dimensions,Platform,Linking,ActivityIndicator,TextInput,ScrollView,FlatList } from 'react-native'
 import * as React from 'react'
 import LottieView from 'lottie-react-native';
 import fonts from "../configs/fonts"
@@ -46,6 +46,12 @@ export default function Results({navigation,route}) {
   React.useEffect(()=>{
     getResults()
   },[focus])  
+  const [refreshing, setRefreshing] = React.useState(false);
+   const handleRefresh=async()=>{
+    setRefreshing(true)
+    await getResults()
+    setRefreshing(false)
+   }
   return (
     <View style={styles.mnonb}>
       <Loading visible={isload}/>
@@ -59,7 +65,11 @@ export default function Results({navigation,route}) {
    <Text style={{fontSize:rp(3),fontFamily:fonts.Nextrabold}}>Result!</Text>
    <Text style={{fontSize:rp(3),fontFamily:fonts.Nregular,marginLeft:5}}>here</Text>
 </View>
-<ScrollView showsVerticalScrollIndicator={false}>
+<ScrollView 
+refreshControl={
+  <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+}
+showsVerticalScrollIndicator={false}>
 {
     results&&results.map((item,i)=>(
         <View key={i} style={{borderWidth:1,borderColor:colors.green,marginBottom:rp(1),paddingHorizontal:rp(2),paddingVertical:rp(1.7),borderRadius:rp(1),display:"flex",flexDirection:"row",alignItems:"center",justifyContent:"space-between"}}>

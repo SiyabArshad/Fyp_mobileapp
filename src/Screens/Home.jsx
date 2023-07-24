@@ -1,4 +1,4 @@
-import { View, Text,Modal,TouchableOpacity,Pressable,Image,StyleSheet,ImageBackground,Dimensions,Platform,Linking,ActivityIndicator,TextInput,ScrollView,FlatList } from 'react-native'
+import { RefreshControl,View, Text,Modal,TouchableOpacity,Pressable,Image,StyleSheet,ImageBackground,Dimensions,Platform,Linking,ActivityIndicator,TextInput,ScrollView,FlatList } from 'react-native'
 import React from 'react'
 import LottieView from 'lottie-react-native';
 import fonts from "../configs/fonts"
@@ -17,6 +17,7 @@ import origin from '../configs/api';
 import routenames from '../configs/routes';
 import axios from "axios"
 import * as Notifications from 'expo-notifications';
+
 export default function Home({navigation}) {
     const focus=useIsFocused()
     const [isload,setisload]=React.useState(false)
@@ -59,7 +60,18 @@ const registerForPushNotificationsAsync = async () => {
     fetchinfo()
       registerForPushNotificationsAsync()
    },[])
+   const [refreshing, setRefreshing] = React.useState(false);
+   const handleRefresh=async()=>{
+    setRefreshing(true)
+    await fetchinfo()
+    setRefreshing(false)
+   }
    return (
+    <ScrollView
+    refreshControl={
+      <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+    }
+    style={{height:Dimensions.get("screen").height,backgroundColor:colors.white}}>
     <View style={styles.mnonb}>
  <Loading visible={isload}/>
 <View style={{display:"flex",flexDirection:"row",justifyContent:"space-between",alignItems:"center",marginTop:rp(5)}}>
@@ -72,6 +84,7 @@ const registerForPushNotificationsAsync = async () => {
 <Enrollments enrollments={data} navigation={navigation}/>
 
     </View>
+    </ScrollView>
   )
 }
 
