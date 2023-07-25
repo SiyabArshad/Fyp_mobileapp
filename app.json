@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "golf",
-    "slug": "golf",
+    "name": "DigiSchool",
+    "slug": "DigiSchool",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -20,7 +20,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#F8F8F8"
       }
     },
     "web": {
@@ -37,7 +37,7 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "948e22e3-0501-47a2-ab7d-8381a5c6fd7b"
+        "projectId": "06c7da64-e27f-49ec-8c2b-070926d77607"
       }
     },
     "owner": "siyab404"
