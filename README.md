@@ -22,5 +22,5 @@ The DigiSchool Mobile App provides a convenient platform for parents to stay upd
 4. Run the app using `npm start`.
 
 #### Contributors:
-- [Siyab Arshad]
-- [Ali Zahid]
+- Siyab Arshad
+- Ali Zahid
